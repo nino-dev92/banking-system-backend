@@ -1,47 +1,12 @@
-"use strict";
-var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
-    if (k2 === undefined) k2 = k;
-    var desc = Object.getOwnPropertyDescriptor(m, k);
-    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
-      desc = { enumerable: true, get: function() { return m[k]; } };
-    }
-    Object.defineProperty(o, k2, desc);
-}) : (function(o, m, k, k2) {
-    if (k2 === undefined) k2 = k;
-    o[k2] = m[k];
-}));
-var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
-    Object.defineProperty(o, "default", { enumerable: true, value: v });
-}) : function(o, v) {
-    o["default"] = v;
-});
-var __importStar = (this && this.__importStar) || (function () {
-    var ownKeys = function(o) {
-        ownKeys = Object.getOwnPropertyNames || function (o) {
-            var ar = [];
-            for (var k in o) if (Object.prototype.hasOwnProperty.call(o, k)) ar[ar.length] = k;
-            return ar;
-        };
-        return ownKeys(o);
-    };
-    return function (mod) {
-        if (mod && mod.__esModule) return mod;
-        var result = {};
-        if (mod != null) for (var k = ownKeys(mod), i = 0; i < k.length; i++) if (k[i] !== "default") __createBinding(result, mod, k[i]);
-        __setModuleDefault(result, mod);
-        return result;
-    };
-})();
-Object.defineProperty(exports, "__esModule", { value: true });
-const express_1 = require("express");
-const authMiddleware_1 = require("../middleware/authMiddleware");
-const controller = __importStar(require("../controllers/accountController"));
-const router = (0, express_1.Router)();
-router.post("/accounts", authMiddleware_1.protect, controller.createAccount);
-router.post("/deposit", authMiddleware_1.protect, controller.deposit);
-router.post("/withdraw", authMiddleware_1.protect, controller.withdraw);
-router.post("/transfer", authMiddleware_1.protect, controller.transfer);
-router.get("/balance/:name", authMiddleware_1.protect, controller.getBalance);
-router.get("/history/:name", authMiddleware_1.protect, controller.getHistory);
-router.get("/accounts/:name", authMiddleware_1.protect, controller.getUserAccount);
-exports.default = router;
+import { Router } from "express";
+import { protect } from "../middleware/authMiddleware.js";
+import * as controller from "../controllers/accountController.js";
+const router = Router();
+router.post("/accounts", protect, controller.createAccount);
+router.post("/deposit", protect, controller.deposit);
+router.post("/withdraw", protect, controller.withdraw);
+router.post("/transfer", protect, controller.transfer);
+router.get("/balance/:name", protect, controller.getBalance);
+router.get("/history/:name", protect, controller.getHistory);
+router.get("/accounts/:name", protect, controller.getUserAccount);
+export default router;

@@ -1,24 +1,20 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.getUserAccount = exports.getHistory = exports.getBalance = exports.transfer = exports.withdraw = exports.deposit = exports.createAccount = void 0;
-const Account_1 = require("../models/Account");
+import { Account } from "../models/Account.js";
 const today = new Date();
 const time = `${today.toLocaleDateString()} - ${today.toLocaleTimeString()}`;
-const createAccount = async (name, userId) => {
-    const exists = await Account_1.Account.findOne({ name, userId });
+export const createAccount = async (name, userId) => {
+    const exists = await Account.findOne({ name, userId });
     if (exists)
         throw new Error("Account already exists");
     const accNumber = Math.floor(10000 + Math.random() * 90000);
-    const account = await Account_1.Account.create({
+    const account = await Account.create({
         name,
         accNumber,
         userId, // 🔥 link to user
     });
     return account;
 };
-exports.createAccount = createAccount;
-const deposit = async (name, amount, userId) => {
-    const account = await Account_1.Account.findOne({ name: name.toLowerCase(), userId });
+export const deposit = async (name, amount, userId) => {
+    const account = await Account.findOne({ name: name.toLowerCase(), userId });
     if (!account)
         throw new Error("Account not found");
     account.balance += amount;
@@ -27,9 +23,8 @@ const deposit = async (name, amount, userId) => {
     await account.save();
     return account;
 };
-exports.deposit = deposit;
-const withdraw = async (name, amount, userId) => {
-    const account = await Account_1.Account.findOne({ name: name.toLowerCase(), userId });
+export const withdraw = async (name, amount, userId) => {
+    const account = await Account.findOne({ name: name.toLowerCase(), userId });
     if (!account)
         throw new Error("Account not found");
     if (amount > account.balance) {
@@ -41,14 +36,13 @@ const withdraw = async (name, amount, userId) => {
     await account.save();
     return account;
 };
-exports.withdraw = withdraw;
-const transfer = async (sender, receiver, amount, userId) => {
+export const transfer = async (sender, receiver, amount, userId) => {
     try {
-        const senderAcc = await Account_1.Account.findOne({
+        const senderAcc = await Account.findOne({
             name: sender.toLowerCase(),
             userId,
         });
-        const receiverAcc = await Account_1.Account.findOne({ name: receiver.toLowerCase() });
+        const receiverAcc = await Account.findOne({ name: receiver.toLowerCase() });
         if (!senderAcc || !receiverAcc) {
             throw new Error("Account not found");
         }
@@ -70,10 +64,9 @@ const transfer = async (sender, receiver, amount, userId) => {
         throw error;
     }
 };
-exports.transfer = transfer;
-const getBalance = async (name, userId) => {
+export const getBalance = async (name, userId) => {
     try {
-        const account = await Account_1.Account.findOne({ name, userId });
+        const account = await Account.findOne({ name, userId });
         if (!account)
             throw new Error("Account not found");
         return account.balance;
@@ -83,10 +76,9 @@ const getBalance = async (name, userId) => {
         throw error;
     }
 };
-exports.getBalance = getBalance;
-const getHistory = async (name, userId) => {
+export const getHistory = async (name, userId) => {
     try {
-        const account = await Account_1.Account.findOne({ name, userId });
+        const account = await Account.findOne({ name, userId });
         if (!account)
             throw new Error("Account not found");
         return account.history;
@@ -96,10 +88,9 @@ const getHistory = async (name, userId) => {
         throw error;
     }
 };
-exports.getHistory = getHistory;
-const getUserAccount = async (username) => {
+export const getUserAccount = async (username) => {
     try {
-        const accounts = await Account_1.Account.findOne({ name: username });
+        const accounts = await Account.findOne({ name: username });
         if (!accounts)
             throw new Error("Account not found");
         return accounts;
@@ -109,4 +100,3 @@ const getUserAccount = async (username) => {
         throw error;
     }
 };
-exports.getUserAccount = getUserAccount;

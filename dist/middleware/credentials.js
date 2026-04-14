@@ -1,14 +1,9 @@
-"use strict";
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
-Object.defineProperty(exports, "__esModule", { value: true });
-const allowedOrigins_js_1 = __importDefault(require("../config/allowedOrigins.js"));
+import allowedOrigins from "../config/allowedOrigins.js";
 const credentials = (req, res, next) => {
     const origin = req.headers.origin;
-    if (origin && allowedOrigins_js_1.default.includes(origin)) {
+    if (origin && allowedOrigins.includes(origin)) {
         res.header("Access-Control-Allow-Credentials", "true");
     }
     next();
 };
-exports.default = credentials;
+export default credentials;
